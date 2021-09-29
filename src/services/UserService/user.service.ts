@@ -7,7 +7,7 @@ import { UserModel } from '../../models/user/user.model';
 class UserService {
   public createUser = async (data: User) => {
     const isUser = await UserModel.findOne({
-      id: data._id
+      id: data._id,
     })
       .lean()
       .exec();
@@ -83,9 +83,7 @@ class UserService {
     // const
   };
   public getUser = async (data: { uid: string; phoneNumber: string }) => {
-    const result = await UserModel.findById(data.uid)
-      .lean()
-      .exec();
+    const result = await UserModel.findById(data.uid).lean().exec();
     if (!result) {
       return {
         uid: data?.uid as string,
