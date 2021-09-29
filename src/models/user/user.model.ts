@@ -16,7 +16,10 @@ const userSchema = new Schema<User>({
   skills: [String],
   isWantSkills: [String],
   isCanSkills: [String],
-  followings: [String],
+  followings: {
+    require: false,
+    type: [String]
+  },
   tasks: [{ type: Schema.Types.ObjectId, ref: 'Tasks' }],
   privateTasks: [String],
   invitedUsersFromMe: [String],
