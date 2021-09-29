@@ -7,11 +7,10 @@ import { UserModel } from '../../models/user/user.model';
 class UserService {
   public createUser = async (data: User) => {
     const isUser = await UserModel.findOne({
-      firebaseUid: data.firebaseUid,
+      id: data._id
     })
       .lean()
       .exec();
-    console.log('ssss');
     if (isUser) return;
 
     // Rework This Code //
@@ -34,7 +33,6 @@ class UserService {
     // 	nominatedUser = user.uid as string;
     // });
     const userModel = new UserModel({
-      firebaseUid: data.firebaseUid,
       phoneNumber: data.phoneNumber,
       isVerify: true,
       nominatedUser,
@@ -62,7 +60,7 @@ class UserService {
       },
     });
     return {
-      uid: newUser.firebaseUid,
+      uid: newUser._id,
       nominatedUid: invitedForMe?.firebaseUid,
     };
     // const blackListModel = new BlackList
@@ -85,7 +83,7 @@ class UserService {
     // const
   };
   public getUser = async (data: { uid: string; phoneNumber: string }) => {
-    const result = await UserModel.findOne({ firebaseUid: data.uid })
+    const result = await UserModel.findById(data.uid)
       .lean()
       .exec();
     if (!result) {
@@ -102,7 +100,7 @@ class UserService {
           avatarSrc: nominatedUser?.avatarSrc,
           firstName: nominatedUser?.firstName,
           lastName: nominatedUser?.lastName,
-          firebaseUid: nominatedUser?.firebaseUid,
+          uid: nominatedUser?._id,
         },
       };
       return currentUser as User;

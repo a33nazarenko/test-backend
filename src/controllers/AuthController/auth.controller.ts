@@ -8,17 +8,18 @@ class AuthController {
             const result = await AuthServiceAPI.verifyCode(phoneNumber, code);
             res.status(200).json(result);
         } catch (error) {
-            res.status(500).send('Bad request');
+            console.log(error)
+            res.status(500).send(error.message);
         }
     }
 
     public sendCode = async (req: Request, res: Response) => {
         try {
             const { phoneNumber, channel } = req.body;
-            const result = await AuthServiceAPI.sendCode(phoneNumber, channel);
-            res.status(200).json(result);
+            await AuthServiceAPI.sendCode(phoneNumber, channel);
+            res.status(200).json({ sentCode: true });
         } catch (error) {
-            res.status(500).send('Bad request');
+            res.status(500).send(error.message);
         }
     }
 
