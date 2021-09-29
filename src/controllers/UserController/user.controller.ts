@@ -28,8 +28,8 @@ class UserController {
   };
   public updateUser = async (req: Request, res: Response) => {
     try {
-      await UserServiceAPI.updateUserProfile(req.body);
-      res.status(201).json({ message: 'Update Successesfully' });
+      const result = await UserServiceAPI.updateUserProfile(req.body);
+      res.status(201).json(result);
     } catch (error) {
       console.log(error);
       res.status(500).send('Bad request');

@@ -25,4 +25,5 @@ export interface User {
   facebookNickname?: string;
   instagramNickname?: string;
   firebaseUid?: string;
+  isFirstStep: boolean;
 }

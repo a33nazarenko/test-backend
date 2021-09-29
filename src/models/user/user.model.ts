@@ -17,7 +17,7 @@ const userSchema = new Schema<User>({
   isWantSkills: [String],
   isCanSkills: [String],
   followings: {
-    require: false,
+    required: false,
     type: [String]
   },
   tasks: [{ type: Schema.Types.ObjectId, ref: 'Tasks' }],
@@ -30,7 +30,8 @@ const userSchema = new Schema<User>({
   twitterNickname: String,
   facebookNickname: String,
   instagramNickname: String,
-  firebaseUid: String
+  firebaseUid: String,
+  isFirstStep: Boolean
 });
 
 export const UserModel = mongoose.model<UserModelType>('Users', userSchema);

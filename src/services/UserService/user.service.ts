@@ -107,15 +107,14 @@ class UserService {
     }
     return result as User;
   };
+
   public updateUserProfile = async (data: any) => {
     if (data) {
-      await UserModel.findOneAndUpdate(
-        { firebaseUid: data.firebaseUid },
-        { ...data },
-      );
+      return await UserModel.findByIdAndUpdate(data._id, { ...data }).lean();
     }
     return;
   };
+
   public addInvitedUsers = async (phoneNumber: string, uid: string) => {
     const newInvite = new InvitedUserModel({
       phoneNumber,
