@@ -41,6 +41,7 @@ class AuthService {
       isCanSkills: [],
       avatarSrc: '',
       followers: [],
+      isFirstStep: true
     });
     const newUser = await userModel.save();
     await UserModel.findByIdAndUpdate(nominatedUser, {
