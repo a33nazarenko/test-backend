@@ -1,9 +1,7 @@
-import { Request } from 'express';
 import { UserModel } from '../../models/user/user.model';
 import { client } from '../../app';
-import { UserServiceAPI } from '../UserService';
 import { InvitedUserModel } from '../../models/invitedUser/invitedUser.model';
-
+import { ObjectId } from 'mongodb';
 class AuthService {
   public login = async () => {
     const newUser = new UserModel();
@@ -87,7 +85,7 @@ class AuthService {
   };
 
   public getUserToFollow = async (id: string) => {
-    const users = await UserModel.find({ $not: { _id: id } }).lean();
+    const users = await UserModel.find({ _id: { $ne: id } });
     return users;
   }
 }
