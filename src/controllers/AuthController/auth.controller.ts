@@ -15,8 +15,8 @@ class AuthController {
 
     public sendCode = async (req: Request, res: Response) => {
         try {
-            const { phoneNumber, channel } = req.body;
-            await AuthServiceAPI.sendCode(phoneNumber, channel);
+            const { phoneNumber } = req.body;
+            await AuthServiceAPI.sendCode(phoneNumber);
             res.status(200).json({ sentCode: true });
         } catch (error) {
             res.status(500).send(error.message);

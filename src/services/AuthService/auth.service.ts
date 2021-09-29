@@ -54,7 +54,7 @@ class AuthService {
     return newUser;
   };
 
-  public sendCode = async (phoneNumber: string, channel: string) => {
+  public sendCode = async (phoneNumber: string) => {
     const invitedUser = await InvitedUserModel.find().lean();
     let currentPhone = '';
     invitedUser.forEach(p => {
@@ -70,7 +70,7 @@ class AuthService {
       .services(`${process.env.TWILIO_VERIFICATION_SID}`)
       .verifications.create({
         to: `+${phoneNumber}`,
-        channel: channel,
+        channel: 'sms',
       });
   };
 
