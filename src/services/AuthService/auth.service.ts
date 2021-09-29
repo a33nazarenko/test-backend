@@ -16,9 +16,7 @@ class AuthService {
   // };
 
   private checkForUser = async (phoneNumber: string) => {
-    const user = await UserModel.findOne({ phoneNumber: phoneNumber })
-      .lean()
-      .exec();
+    const user = await UserModel.findOne({ phoneNumber }).lean().exec();
     if (user) return user;
     const invitedUser = await InvitedUserModel.find().lean();
     let currentPhone = '';
@@ -35,7 +33,7 @@ class AuthService {
       .exec();
     const nominatedUser = invitedForMe?._id;
     const userModel = new UserModel({
-      phoneNumber: phoneNumber,
+      phoneNumber,
       isVerify: true,
       nominatedUser,
       joinedAt: new Date(),
@@ -69,7 +67,7 @@ class AuthService {
     await client.verify
       .services(`${process.env.TWILIO_VERIFICATION_SID}`)
       .verifications.create({
-        to: `+${phoneNumber}`,
+        to: `${phoneNumber}`,
         channel: 'sms',
       });
   };
@@ -79,7 +77,7 @@ class AuthService {
       .services(`${process.env.TWILIO_VERIFICATION_SID}`)
       .verificationChecks.create({
         to: `+${phoneNumber}`,
-        code: code,
+        code,
       });
     if (result.valid) {
       return this.checkForUser(phoneNumber);
