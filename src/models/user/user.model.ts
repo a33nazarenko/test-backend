@@ -31,6 +31,7 @@ const userSchema = new Schema<User>({
   facebookNickname: String,
   instagramNickname: String,
   firebaseUid: String,
+  isFirstStep: Boolean,
 });
 
 export const UserModel = mongoose.model<UserModelType>('Users', userSchema);
