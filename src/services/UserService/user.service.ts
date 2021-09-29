@@ -142,9 +142,9 @@ class UserService {
     const invitedFromMe = await UserModel.find({
       invitedUsersFromMe: currentPhone,
     }).lean();
-    let nominatedUser: string;
+    let nominatedUser: any;
     invitedFromMe.forEach(item => {
-      nominatedUser = item.uid as string;
+      nominatedUser = item._id;
     });
     const isNominated = !!nominatedUser!;
 
