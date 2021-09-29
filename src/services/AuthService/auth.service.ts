@@ -76,7 +76,7 @@ class AuthService {
     const result = await client.verify
       .services(`${process.env.TWILIO_VERIFICATION_SID}`)
       .verificationChecks.create({
-        to: `+${phoneNumber}`,
+        to: `${phoneNumber}`,
         code,
       });
     if (result.valid) {
