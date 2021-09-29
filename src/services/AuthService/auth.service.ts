@@ -87,7 +87,7 @@ class AuthService {
   };
 
   public getUserToFollow = async (id: string) => {
-    const users = await UserModel.find({ _id: { $ne: id } }).lean();
+    const users = await UserModel.find({ $not: { _id: id } }).lean();
     return users;
   }
 }
