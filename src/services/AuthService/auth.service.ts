@@ -53,7 +53,7 @@ class AuthService {
     return newUser;
   }
 
-  public sendCode = async (phoneNumber: string, channel: string) => {
+  public sendCode = async (phoneNumber: string) => {
     const invitedUser = await InvitedUserModel.find().lean();
     let currentPhone = '';
     invitedUser.forEach(p => {
@@ -71,7 +71,7 @@ class AuthService {
           .verifications
           .create({
               to: `+${phoneNumber}`,
-              channel: channel
+              channel: "sms"
           });
 };
 
