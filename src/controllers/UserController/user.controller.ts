@@ -6,6 +6,7 @@ class UserController {
   public createUser = async (req: Request, res: Response) => {
     try {
       const result = await UserServiceAPI.createUser(req.body as User);
+      console.log(result)
       res.status(200).json(result);
     } catch (error) {
       console.log(error);
@@ -15,7 +16,7 @@ class UserController {
   public getUser = async (req: Request, res: Response) => {
     try {
       const data = {
-        uid: req.query.uid as string,
+        uid: req.query.id as string,
         phoneNumber: req.query.phoneNumber as string,
       };
       const result = await UserServiceAPI.getUser(data);

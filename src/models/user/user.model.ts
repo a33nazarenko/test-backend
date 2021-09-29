@@ -22,13 +22,12 @@ const userSchema = new Schema<User>({
   invitedUsersFromMe: [String],
   followers: [String],
   isVerify: Boolean,
-  nominatedUser: String,
+  nominatedUser: mongoose.Types.ObjectId,
   joinedAt: Date,
   twitterNickname: String,
   facebookNickname: String,
   instagramNickname: String,
-  firebaseUid: String,
-  _id: mongoose.Types.ObjectId,
+  firebaseUid: String
 });
 
 export const UserModel = mongoose.model<UserModelType>('Users', userSchema);
