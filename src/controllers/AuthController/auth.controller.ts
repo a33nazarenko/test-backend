@@ -7,9 +7,9 @@ class AuthController {
       const { phoneNumber, code } = req.body;
       const result = await AuthServiceAPI.verifyCode(phoneNumber, code);
       res.status(200).json(result);
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
-      res.status(500).send(error);
+      res.status(400).json({ message: error.message });
     }
   };
 
