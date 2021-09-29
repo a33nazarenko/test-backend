@@ -84,6 +84,11 @@ class AuthService {
     }
     throw new Error('Code is not valid! Try Again');
   };
+
+  public getUserToFollow = async (id: string) => {
+    const users = await UserModel.find({ _id: { $ne: id } }).lean();
+    return users;
+  }
 }
 
 export const AuthServiceAPI = new AuthService();

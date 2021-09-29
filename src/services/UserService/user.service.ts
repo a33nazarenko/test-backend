@@ -216,10 +216,9 @@ class UserService {
     return userDb;
   };
 
-  public addFollowings = async (uid: string, followingIds: string[]) => {
-    console.log(uid, '=====');
+  public addFollowings = async (_id: string, followingIds: string[]) => {
     await UserModel.updateOne(
-      { firebaseUid: uid },
+      {id: _id},
       {
         followings: followingIds,
       },
@@ -227,8 +226,8 @@ class UserService {
 
     followingIds.forEach(async item => {
       await UserModel.updateOne(
-        { uid: item },
-        { $push: { followers: uid } },
+        { _id: item },
+        { $push: { followers: _id } },
         { new: true, upsert: true },
       );
     });

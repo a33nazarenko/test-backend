@@ -22,6 +22,16 @@ class AuthController {
       res.status(400).json({ message: error.message });
     }
   };
+
+  public getUserToFollow = async (req: Request, res: Response) => {
+    try {
+        const _id = req.params._id as string;
+        const result = await AuthServiceAPI.getUserToFollow(_id);
+        res.status(200).json(result);
+    } catch(error: any) {
+        res.status(400).json({message: error.message})
+    }
+  }
 }
 
 export const AuthControllerAPI = new AuthController();
