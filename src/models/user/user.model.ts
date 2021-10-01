@@ -3,7 +3,7 @@ import { locationScheme } from '../task/task.model';
 import { User } from './types';
 const { Schema } = mongoose;
 
-type UserModelType = User & Document;
+export type UserModelType = User & Document;
 
 const userSchema = new Schema<User>({
   phoneNumber: String,

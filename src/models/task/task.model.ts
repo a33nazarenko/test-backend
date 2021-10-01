@@ -29,10 +29,13 @@ const taskSchema = new Schema<TaskModelType>({
   price: String,
   priceType: String,
   description: String,
-  type: Number,
+  type: {
+    type: Number,
+    enum: ETypeTask,
+  },
   uid: { type: mongoose.Types.ObjectId, ref: 'Users' },
   isWant: Boolean,
-  userIds: [String],
+  userIds: [mongoose.Types.ObjectId],
   respondIds: [String],
    taskStatus: {
     type: Number,

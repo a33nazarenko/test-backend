@@ -5,6 +5,19 @@ import { User } from '../../models/user/types';
 import { UserModel } from '../../models/user/user.model';
 
 class UserService {
+  public compareUserAndNominatedUser = async (data: User) => {
+    const nominatedUser = await UserModel.findById(data.nominatedUser);
+    const updateUser = {
+      ...data,
+      nominatedUser: {
+        avatarSrc: nominatedUser?.avatarSrc,
+        firstName: nominatedUser?.firstName,
+        lastName: nominatedUser?.lastName,
+        _id: nominatedUser?._id,
+      },
+    };
+    return updateUser;
+  };
   public createUser = async (data: User) => {
     const isUser = await UserModel.findOne({
       id: data._id,
@@ -108,7 +121,10 @@ class UserService {
 
   public updateUserProfile = async (data: any) => {
     if (data) {
-      return await UserModel.findByIdAndUpdate(data._id, { ...data }).lean();
+      const user = await UserModel.findByIdAndUpdate(data._id, {
+        ...data,
+      }).lean();
+      return await this.compareUserAndNominatedUser(user as User);
     }
     return;
   };
@@ -216,7 +232,7 @@ class UserService {
 
   public addFollowings = async (_id: string, followingIds: string[]) => {
     await UserModel.updateOne(
-      {id: _id},
+      { id: _id },
       {
         followings: followingIds,
       },

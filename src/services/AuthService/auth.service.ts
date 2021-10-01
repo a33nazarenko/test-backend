@@ -1,7 +1,7 @@
-import { UserModel } from '../../models/user/user.model';
+import { UserModel, UserModelType } from '../../models/user/user.model';
 import { client } from '../../app';
 import { InvitedUserModel } from '../../models/invitedUser/invitedUser.model';
-import { ObjectId } from 'mongodb';
+import { UserServiceAPI } from '../UserService';
 class AuthService {
   public login = async () => {
     const newUser = new UserModel();
@@ -15,7 +15,10 @@ class AuthService {
 
   private checkForUser = async (phoneNumber: string) => {
     const user = await UserModel.findOne({ phoneNumber }).lean().exec();
-    if (user) return user;
+    const updateUser = await UserServiceAPI.compareUserAndNominatedUser(
+      user as UserModelType,
+    );
+    if (user) return updateUser;
     const invitedUser = await InvitedUserModel.find().lean();
     let currentPhone = '';
     invitedUser.forEach(p => {
@@ -39,7 +42,7 @@ class AuthService {
       isCanSkills: [],
       avatarSrc: '',
       followers: [],
-      isFirstStep: true
+      isFirstStep: true,
     });
     const newUser = await userModel.save();
     await UserModel.findByIdAndUpdate(nominatedUser, {
@@ -48,7 +51,9 @@ class AuthService {
         followings: newUser._id,
       },
     });
-    return newUser;
+    const updateUserToNominate =
+      await UserServiceAPI.compareUserAndNominatedUser(newUser);
+    return updateUserToNominate;
   };
 
   public sendCode = async (phoneNumber: string) => {
@@ -87,7 +92,7 @@ class AuthService {
   public getUserToFollow = async (id: string) => {
     const users = await UserModel.find({ _id: { $ne: id } });
     return users;
-  }
+  };
 }
 
 export const AuthServiceAPI = new AuthService();
