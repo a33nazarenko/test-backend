@@ -1,5 +1,5 @@
 import mongoose, { Document } from 'mongoose';
-import { ETaskStatus, TaskDTO } from './types';
+import { ETaskStatus, TaskDTO, ETypeTask } from './types';
 const { Schema } = mongoose;
 
 export type TaskModelType = TaskDTO & Document;
@@ -24,10 +24,13 @@ const taskSchema = new Schema<TaskModelType>({
   price: Number,
   priceType: String,
   description: String,
-  type: Number,
+  type: {
+    type: Number,
+    enum: ETypeTask,
+  },
   uid: { type: mongoose.Types.ObjectId, ref: 'Users' },
   isWant: Boolean,
-  userIds: [String],
+  userIds: [mongoose.Types.ObjectId],
   respondIds: [String],
   taskStatus: {
     type: Number,

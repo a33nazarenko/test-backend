@@ -21,7 +21,7 @@ class TaskService {
     const userIds = tasks.map(item => item.id);
     const uniqIds = Array.from(new Set(userIds));
     if (!uniqIds.length) return [];
-    const users = await UserModel.find().where('uid').in(uniqIds).lean();
+    const users = await UserModel.find().where('_id').in(uniqIds).lean();
     const newTasks: Task[] = tasks.map(item => {
       const findCurrentUser = users.find(f => f._id === item.uid) as User;
       return {
@@ -70,14 +70,13 @@ class TaskService {
     };
   };
   public getTasksFeed = async (uid: mongoose.Types.ObjectId, type: string) => {
-    // const tasks = await TaskModel.find({
-    //   userIds: uid && type !== '1' ? uid : '',
-    //   type: +type,
-    //   acceptedFromExecutor: false,
-    // }).lean();
-    // const mapTasks = await this.getUserToTask(tasks);
-    // return this.sortTime(mapTasks).filter(item => item.uid !== uid);
-    // return mapTasks;
+    const tasks = await TaskModel.find({
+      userIds: uid,
+      type: +type,
+      acceptedFromExecutor: false,
+    }).lean();
+    const mapTasks = await this.getUserToTask(tasks);
+    return this.sortTime(mapTasks).filter(item => item.uid !== uid);
   };
   public getTasksHistory = async (
     uid: string,
