@@ -29,24 +29,55 @@ export interface TaskDTO {
   // userName: string;
   // userLocation: GooglePlaceInfo;
   // userAvatarSrc: string;
+
+
+  // createdTime: Date;
+  // name: string;
+  // categories: string[];
+  // address: GooglePlaceInfo;
+  // remote: boolean;
+  // fromTime?: any;
+  // toTime?: any;
+  // startDate?: Date | null;
+  // endDate?: Date | null;
+  // workDays?: boolean;
+  // weekends?: boolean;
+  // price: number;
+  // priceType: string;
+  // description?: string;
+  // type: ETypeTask;
+  // uid: mongoose.Types.ObjectId;
+  // isWant: boolean;
+  // userIds?: mongoose.Types.ObjectId[];
+  // respondIds?: string[];
+  // taskStatus: ETaskStatus;
+  // acceptedFromCustomer: boolean;
+  // acceptedFromExecutor: boolean;
+  // isDoneFromExecutor: boolean;
+  // isDoneFromCustomer: boolean;
+  // isDone?: boolean;
+  // id?: string;
+
   createdTime: Date;
   name: string;
   categories: string[];
   address: GooglePlaceInfo;
   remote: boolean;
-  fromTime?: any;
-  toTime?: any;
-  startDate?: Date | null;
-  endDate?: Date | null;
-  workDays?: boolean;
-  weekends?: boolean;
-  price: number;
+  calendarRangeStartDate?: Date| null;
+  calendarRangeEndDate?: Date | null;
+  starts?: Date | null;
+  ends?: Date | null;
+  nowDate?: Date | null;
+  todayStarts?: Date | null;
+  todayEnds?: Date | null;
+  todayDate?: Date | null;
+  price: string;
   priceType: string;
   description?: string;
   type: ETypeTask;
   uid: mongoose.Types.ObjectId;
   isWant: boolean;
-  userIds?: mongoose.Types.ObjectId[];
+  userIds?: [mongoose.Types.ObjectId];
   respondIds?: string[];
   taskStatus: ETaskStatus;
   acceptedFromCustomer: boolean;
@@ -55,6 +86,7 @@ export interface TaskDTO {
   isDoneFromCustomer: boolean;
   isDone?: boolean;
   id?: string;
+  taskDays?: string[];
 }
 export interface Task extends TaskDTO {
   userName: string;
