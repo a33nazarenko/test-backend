@@ -15,9 +15,10 @@ class TaskController {
   };
   public getTask = async (req: Request, res: Response) => {
     try {
+      const id = req.query.id as string;
+      const uid = req.query.uid as any;
       const result = await TaskServiceAPI.getTask(
-        req.query.id as string,
-        req.query.uid as any,
+        id, uid
       );
       res.status(200).json(result);
     } catch (error) {
@@ -36,13 +37,13 @@ class TaskController {
   };
   public getTasksHistory = async (req: Request, res: Response) => {
     try {
-      const uid = req.query.uid as string;
+      const uid = req.query.uid as any;
+      const type = req.query.type as string;
       const isDone = (req.query.isDone as string) === '0' ? false : true;
-      const isCreated = (req.query.isCreated as string) === '0' ? false : true;
       const result = await TaskServiceAPI.getTasksHistory(
         uid,
         isDone,
-        isCreated,
+        type
       );
       res.status(200).json(result);
     } catch (error) {

@@ -77,7 +77,7 @@ export interface TaskDTO {
   type: ETypeTask;
   uid: mongoose.Types.ObjectId;
   isWant: boolean;
-  userIds?: [mongoose.Types.ObjectId];
+  userIds?: string[];
   respondIds?: string[];
   taskStatus: ETaskStatus;
   acceptedFromCustomer: boolean;

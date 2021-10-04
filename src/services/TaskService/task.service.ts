@@ -24,7 +24,9 @@ class TaskService {
     if (!uniqIds.length) return [];
     const users = await UserModel.find().where('_id').in(uniqIds).lean().exec();
     const newTasks: Task[] = tasks.map(item => {
-      const findCurrentUser = users.find(f => f._id) as User;
+      const findCurrentUser = users.find(f => {
+        return f._id.equals(item.uid)
+      }) as User;
       return {
         ...item,
         userAvatarSrc: findCurrentUser.avatarSrc
@@ -52,7 +54,7 @@ class TaskService {
   };
 
   public getTask = async (id: string, uid: mongoose.Types.ObjectId) => {
-    const task = await TaskModel.findOne({ id }).populate('uid').lean();
+    const task = await TaskModel.findOne({ _id: id }).populate(uid).lean();
     const user = await UserModel.findOne({ _id: task?.uid }).lean();
     let users: User[] = [];
     if (task?.uid === uid && task.respondIds?.length) {
@@ -71,34 +73,37 @@ class TaskService {
       users,
     };
   };
+  
   public getTasksFeed = async (uid: mongoose.Types.ObjectId, type: string) => {
     const tasks = await TaskModel.find({
-      userIds: uid,
+      userIds: uid ? uid.toString() : [],
       type: +type,
       acceptedFromExecutor: false
-    }).lean().exec() as TaskDTO[];
-    const mapTasks = await this.getUserToTask(tasks);
-    return this.sortTime(mapTasks).filter(item => item.uid !== uid);
+    }).lean() as TaskDTO[];
+    const selectedTasks = tasks.filter(item => item.uid.toString() !== uid.toString());
+    const mapTasks = await this.getUserToTask(selectedTasks);
+    return this.sortTime(mapTasks).filter(item => !item.respondIds?.includes(uid.toString()));
   };
+
   public getTasksHistory = async (
-    uid: string,
+    uid: mongoose.Types.ObjectId,
     isDone: boolean,
-    isCreated: boolean,
+    type: string,
   ) => {
     let mapTasks: Task[] = [];
-    if (!isCreated) {
+    if (type !== '1') {
       const tasks = await TaskModel.find({
-        respondIds: uid,
+        respondIds: uid.toString(),
         isDone,
       }).lean() as TaskDTO[];
       mapTasks = await this.getUserToTask(tasks);
-      return mapTasks;
+      return this.sortTime(mapTasks);
     }
     const tasksCreated = await TaskModel.find({
-      uid,
+      uid
     }).lean() as TaskDTO[];
     mapTasks = await this.getUserToTask(tasksCreated);
-    return mapTasks;
+    return this.sortTime(mapTasks);
   };
 }
 
