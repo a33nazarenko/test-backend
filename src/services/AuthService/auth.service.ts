@@ -11,7 +11,7 @@ class AuthService {
 
   // public logOut = async (req: Request) => {
   //   await UserModel.findByIdAndDelete(req.body._id);
-  // }; 
+  // };
 
   private checkForUser = async (phoneNumber: string) => {
     const user = await UserModel.findOne({ phoneNumber }).lean().exec();
