@@ -174,35 +174,19 @@ class UserService {
   };
 
   public addFollowing = async (uid: string, followingId: string) => {
-    await UserModel.findOneAndUpdate(
-      { uid },
+    await UserModel.findByIdAndUpdate(
+      uid,
       { $push: { followings: followingId } },
       { new: true, upsert: true },
     );
-    await UserModel.findOneAndUpdate(
-      { uid: followingId },
+    await UserModel.findByIdAndUpdate(
+      followingId,
       { $push: { followers: uid } },
       { new: true, upsert: true },
     );
 
     const userDb = await UserModel.findOne({ uid: followingId }).lean();
-    if (userDb?.nominatedUser) {
-      const nominatedUser = await UserModel.findOne({
-        firebaseUid: userDb?.nominatedUser,
-      });
-      const currentUser = {
-        ...userDb,
-        nominatedUser: {
-          avatarSrc: nominatedUser?.avatarSrc,
-          firstName: nominatedUser?.firstName,
-          lastName: nominatedUser?.lastName,
-          firebaseUid: nominatedUser?.firebaseUid,
-        },
-      };
-      // console.log(currentUser);
-      return currentUser;
-    }
-    return userDb;
+    return this.compareUserAndNominatedUser(userDb as User);
   };
 
   public removeFollowing = async (uid: string, followingId: string) => {
