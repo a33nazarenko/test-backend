@@ -121,9 +121,15 @@ class UserService {
 
   public updateUserProfile = async (data: any) => {
     if (data) {
-      const user = await UserModel.findByIdAndUpdate(data._id, {
-        ...data,
-      }).lean();
+      const user = await UserModel.findByIdAndUpdate(
+        data._id,
+        {
+          ...data,
+        },
+        {
+          new: true,
+        },
+      ).lean();
       return await this.compareUserAndNominatedUser(user as User);
     }
     return;
