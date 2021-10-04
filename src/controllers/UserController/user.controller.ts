@@ -6,7 +6,7 @@ class UserController {
   public createUser = async (req: Request, res: Response) => {
     try {
       const result = await UserServiceAPI.createUser(req.body as User);
-      console.log(result)
+      console.log(result);
       res.status(200).json(result);
     } catch (error) {
       res.status(500).send('Bad request');
@@ -93,6 +93,16 @@ class UserController {
       await UserServiceAPI.addFollowings(firebaseUid, followingIds);
       res.status(201).send('Followers added');
     } catch (error) {
+      res.status(500).send('Bad request');
+    }
+  };
+  public getFollowings = async (req: Request, res: Response) => {
+    try {
+      const { followingsIds } = req.body;
+      const followings = await UserServiceAPI.getFollowings(followingsIds);
+      res.status(200).json(followings);
+    } catch (error) {
+      console.log(error);
       res.status(500).send('Bad request');
     }
   };

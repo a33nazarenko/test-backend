@@ -233,6 +233,13 @@ class UserService {
       );
     });
   };
+  public getFollowings = async (followingsIds: string[]) => {
+    const folllowings = await UserModel.find()
+      .where('_id')
+      .in(followingsIds as string[])
+      .lean();
+    return folllowings;
+  };
 }
 
 export const UserServiceAPI = new UserService();
