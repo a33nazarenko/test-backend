@@ -8,7 +8,7 @@ import {
 } from '../../models/task/types';
 import { User } from '../../models/user/types';
 import { UserModel } from '../../models/user/user.model';
-import {ObjectId}  from 'mongodb';
+import { ObjectId } from 'mongodb';
 
 class TaskService {
   private sortTime = (data: Task[]): Task[] => {
@@ -25,7 +25,7 @@ class TaskService {
     const users = await UserModel.find().where('_id').in(uniqIds).lean().exec();
     const newTasks: Task[] = tasks.map(item => {
       const findCurrentUser = users.find(f => {
-        return f._id.equals(item.uid)
+        return f._id.equals(item.uid);
       }) as User;
       return {
         ...item,
@@ -73,16 +73,19 @@ class TaskService {
       users,
     };
   };
-  
   public getTasksFeed = async (uid: mongoose.Types.ObjectId, type: string) => {
-    const tasks = await TaskModel.find({
+    const tasks = (await TaskModel.find({
       userIds: uid ? uid.toString() : [],
       type: +type,
-      acceptedFromExecutor: false
-    }).lean() as TaskDTO[];
-    const selectedTasks = tasks.filter(item => item.uid.toString() !== uid.toString());
+      acceptedFromExecutor: false,
+    }).lean()) as TaskDTO[];
+    const selectedTasks = tasks.filter(
+      item => item.uid.toString() !== uid.toString(),
+    );
     const mapTasks = await this.getUserToTask(selectedTasks);
-    return this.sortTime(mapTasks).filter(item => !item.respondIds?.includes(uid.toString()));
+    return this.sortTime(mapTasks).filter(
+      item => !item.respondIds?.includes(uid.toString()),
+    );
   };
 
   public getTasksHistory = async (
@@ -92,16 +95,16 @@ class TaskService {
   ) => {
     let mapTasks: Task[] = [];
     if (type !== '1') {
-      const tasks = await TaskModel.find({
+      const tasks = (await TaskModel.find({
         respondIds: uid.toString(),
         isDone,
-      }).lean() as TaskDTO[];
+      }).lean()) as TaskDTO[];
       mapTasks = await this.getUserToTask(tasks);
       return this.sortTime(mapTasks);
     }
-    const tasksCreated = await TaskModel.find({
-      uid
-    }).lean() as TaskDTO[];
+    const tasksCreated = (await TaskModel.find({
+      uid,
+    }).lean()) as TaskDTO[];
     mapTasks = await this.getUserToTask(tasksCreated);
     return this.sortTime(mapTasks);
   };

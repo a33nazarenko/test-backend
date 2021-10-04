@@ -1,5 +1,6 @@
 import express from 'express';
 import { UserControllerAPI } from '../controllers/UserController';
+import { UserServiceAPI } from '../services/UserService';
 
 export const userRoutes = express.Router();
 
@@ -16,3 +17,4 @@ userRoutes
 userRoutes.route('/addFollowing').post(UserControllerAPI.addFollowing);
 userRoutes.route('/removeFollowing').post(UserControllerAPI.removeFollowing);
 userRoutes.route('/addFollowings').post(UserControllerAPI.addFollowings);
+userRoutes.route('/getFollowings').post(UserControllerAPI.getFollowings);
