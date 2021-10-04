@@ -9,20 +9,15 @@ class UserController {
       console.log(result)
       res.status(200).json(result);
     } catch (error) {
-      console.log(error);
       res.status(500).send('Bad request');
     }
   };
   public getUser = async (req: Request, res: Response) => {
     try {
-      const data = {
-        uid: req.query.id as string,
-        phoneNumber: req.query.phoneNumber as string,
-      };
-      const result = await UserServiceAPI.getUser(data);
+      const uid = req.query.id  as string;
+      const result = await UserServiceAPI.getUser(uid);
       res.status(200).json(result);
     } catch (error) {
-      console.log(error);
       res.status(500).send('Bad request');
     }
   };

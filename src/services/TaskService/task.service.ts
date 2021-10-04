@@ -76,7 +76,7 @@ class TaskService {
   
   public getTasksFeed = async (uid: mongoose.Types.ObjectId, type: string) => {
     const tasks = await TaskModel.find({
-      userIds: uid ? uid.toString() : [],
+      userIds: uid && type !== '1' ? uid.toString() : [],
       type: +type,
       acceptedFromExecutor: false
     }).lean() as TaskDTO[];

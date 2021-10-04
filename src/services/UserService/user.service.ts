@@ -95,28 +95,9 @@ class UserService {
     // console.log(invitedUsers);
     // const
   };
-  public getUser = async (data: { uid: string; phoneNumber: string }) => {
-    const result = await UserModel.findById(data.uid).lean().exec();
-    if (!result) {
-      return {
-        uid: data?.uid as string,
-        phoneNumber: data?.phoneNumber as string,
-      };
-    }
-    if (result.nominatedUser) {
-      const nominatedUser = await UserModel.findById(result.nominatedUser);
-      const currentUser = {
-        ...result,
-        nominatedUser: {
-          avatarSrc: nominatedUser?.avatarSrc,
-          firstName: nominatedUser?.firstName,
-          lastName: nominatedUser?.lastName,
-          uid: nominatedUser?._id,
-        },
-      };
-      return currentUser as User;
-    }
-    return result as User;
+  public getUser = async (uid: string) => {
+    const result = await UserModel.findById(uid).lean().exec();
+    return await this.compareUserAndNominatedUser(result as User);
   };
 
   public updateUserProfile = async (data: any) => {
